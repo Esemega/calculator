@@ -11,41 +11,44 @@ const divide = (a, b) => a / b;
 const getA = () => document.getElementById("input-a").value;
 const getB = () => document.getElementById("input-b").value;
 
-//print a error in the output -> h3#result
-const printError = () => {document.getElementById("result").innerText = "Error";}
-
-//print result of the operation in the output -> h3#result
-const getSum = () => { document.getElementById("result").innerText = sum(Number(getA()),Number(getB()));}
-const getSubtract = () => {document.getElementById("result").innerText = subtract(getA(),getB());}
-const getMultiply = () => {document.getElementById("result").innerText = multiply(getA(),getB());}
-const getDivide = () => {document.getElementById("result").innerText = divide(getA(),getB());}
-
+//print the result in the output -> h3#result
+const setResult = (result) => {
+  document.getElementById("result").innerText = result;
+};
 
 //Evaluate if any input is empty and run the function depending on button clicked
-const getResult = (event) => { 
-    if(getA() === "" || getB() === "") {
-        printError();
-    } else {
-            switch (event.target.id) {
-                case "button-sum":
-                    getSum();
-                    break;
-                case "button-subtract":
-                    getSubtract();
-                    break;
-                case "button-multiply":
-                    getMultiply();
-                    break;
-                case "button-divide":
-                    getDivide();
-                    break;
-            }
+const getResult = (event) => {
+  const a = getA();
+  const b = getB();
+
+  if (a === "" || b === "") {
+    setResult("Error!");
+  } else {
+    switch (event.target.id) {
+      case "button-sum":
+        setResult(sum(Number(a), Number(b)));
+        break;
+      case "button-subtract":
+        setResult(subtract(a, b));
+        break;
+      case "button-multiply":
+        setResult(multiply(a, b));
+        break;
+      case "button-divide":
+        setResult(divide(a, b));
+        break;
     }
-    
-}
+  }
+};
 
 //Adding an event listerner for each button
-document.getElementById("button-sum").addEventListener("click",getResult);
-document.getElementById("button-subtract").addEventListener("click",getResult);
-document.getElementById("button-multiply").addEventListener("click",getResult);
-document.getElementById("button-divide").addEventListener("click",getResult);
+const addEventListernerToButton = (button) => {
+  document
+    .getElementById("button-" + button)
+    .addEventListener("click", getResult);
+};
+
+addEventListernerToButton("sum");
+addEventListernerToButton("subtract");
+addEventListernerToButton("multiply");
+addEventListernerToButton("divide");
