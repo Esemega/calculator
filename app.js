@@ -7,9 +7,8 @@ const subtract = (a, b) => a - b;
 const multiply = (a, b) => a * b;
 const divide = (a, b) => a / b;
 
-//get 2 inputs
-const getA = () => document.getElementById("input-a").value;
-const getB = () => document.getElementById("input-b").value;
+//get input
+const getInput = (input) => document.getElementById("input-" + input).value;
 
 //print the result in the output -> h3#result
 const setResult = (result) => {
@@ -18,8 +17,8 @@ const setResult = (result) => {
 
 //Evaluate if any input is empty and run the function depending on button clicked
 const getResult = (event) => {
-  const a = getA();
-  const b = getB();
+  const a = getInput("a");
+  const b = getInput("b");
 
   if (a === "" || b === "") {
     setResult("Error!");
