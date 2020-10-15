@@ -5,16 +5,16 @@ const multiply = (a, b) => a * b;
 const divide = (a, b) => a / b;
 
 //calculate depending on operation
-const calculate = (operation, num1, num2) => {
+const calculate = (operation, a, b) => {
   switch (operation) {
     case "sum":
-      return sum(Number(num1), Number(num2));
+      return sum(Number(a), Number(b));
     case "subtract":
-      return subtract(num1, num2);
+      return subtract(a, b);
     case "multiply":
-      return multiply(num1, num2);
+      return multiply(a, b);
     case "divide":
-      return divide(num1, num2);
+      return divide(a, b);
   }
 };
 
