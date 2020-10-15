@@ -37,60 +37,62 @@ const getSymbolOfChosenOperation = (operation) => {
 //get input
 const getInput = () => document.getElementById("input").value;
 
-//print the result in the output -> h3#result
-const setResult = (result) => {
-  document.getElementById("result").innerText = result;
-};
+//print the result in the outputs -> h3#result & h4#operations
+const print = (idElement, message) =>
+  (document.getElementById(idElement).innerText = message);
 
-const printSequence = (sequence) => {
-  document.getElementById("operations").innerText = sequence;
+//setting operations sequence
+const setOperations = (lastOperations, operand, Operation) => {
+  return (
+    lastOperations + operand + " " + getSymbolOfChosenOperation(Operation) + " "
+  );
 };
-
-//declaring this before the event handler
+//declaring these variables before the event handler
 let temp = 0;
 let lastChosenOperation;
 let operations = "";
-//Evaluate if any input is empty and run the function depending on button clicked
-const getResult = (event) => {
-  
+
+const buttonEventHandler = (event) => {
   //read input
   const input = getInput();
   //read chosen operation
   let chosenOperation = event.target.id.replace("button-", "");
 
-  if (chosenOperation === "equal") {
-    temp = calculate(lastChosenOperation, temp, input);
-    setResult(temp);
-    // console.log("if chosenOperation === equal - temp", temp);
-    // console.log("if chosenOperation === equal - chosenOperation", chosenOperation);
-    // console.log("if chosenOperation === equal - lastChosenOperation", lastChosenOperation);
-    operations = operations + input +" "+ getSymbolOfChosenOperation(chosenOperation)+" ";
-    printSequence(operations);
-    operations = "";
-    lastChosenOperation = "";
-    temp = 0;
+  if (input === "") {
+    //to avoid user can put +++ without entering any operation
+    print("result", "Error!");
+    print("operations", "");
   } else {
-    if (temp === 0) {
-      temp = input;
-      setResult("");
-      // console.log("if temp === '' - temp", temp);
-      // console.log("if temp === '' - chosenOperation", chosenOperation);
-      // console.log("if temp === '' - lastChosenOperation", lastChosenOperation);
+    //if chosenOperations === "equal" or (else) the operations is sum, subtract, multiply or divide
+    if (chosenOperation === "equal") {
+      //setting and printing result and operations
+      const result = calculate(lastChosenOperation, temp, input);
+      operations = setOperations(operations, input, chosenOperation);
+      print("result", result);
+      print("operations", operations);
+      //restarting variables
+      operations = "";
+      lastChosenOperation = "";
+      temp = 0;
     } else {
-      temp = calculate(lastChosenOperation, temp, input);
-      // console.log("else temp === '' - temp", temp);
-      // console.log("else temp === '' - chosenOperation", chosenOperation);
-      // console.log("else temp === '' - lastChosenOperation", lastChosenOperation);
+      if (temp === 0) {
+        //if its the first input the temp variable will be equal to input
+        temp = input;
+        //cleaning result output
+        print("result", "");
+      } else {
+        //if not the temp is calculed with the lastChosenOperation
+        temp = calculate(lastChosenOperation, temp, input);
+      }
+      //once all has been calculated the chosenOperation is stored as the lastChosenOperation
+      lastChosenOperation = chosenOperation;
+      // setting and printing operations
+      operations = setOperations(operations, input, chosenOperation);
+      print("operations", operations);
     }
-    lastChosenOperation = chosenOperation;
-    operations = operations + input +" "+ getSymbolOfChosenOperation(chosenOperation)+" ";
-    printSequence(operations);
   }
 
-  //print all operations
-  // operations = operations + input + getSymbolOfChosenOperation(chosenOperation);
-  // printSequence(operations);
-  //clean the input
+  //cleaning the input
   document.getElementById("input").value = "";
 };
 
@@ -98,7 +100,7 @@ const getResult = (event) => {
 const addEventListernerToButton = (button) => {
   document
     .getElementById("button-" + button)
-    .addEventListener("click", getResult);
+    .addEventListener("click", buttonEventHandler);
 };
 
 addEventListernerToButton("sum");
